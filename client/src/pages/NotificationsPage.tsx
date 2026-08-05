@@ -1,0 +1,10 @@
+/** Quiet Materiality — 프로젝트 진행과 저장한 자재의 변화를 차분히 확인하는 알림 페이지. */
+
+import { AppShell } from "@/components/AppShell";
+import { PageTitle } from "@/components/InteriorPieces";
+import { NOTIFICATIONS } from "@/data/mockData";
+import { Bell, CheckCheck, Sparkles } from "lucide-react";
+import { useState } from "react";
+import { Link } from "wouter";
+
+export default function NotificationsPage() { const [readIds, setReadIds] = useState<string[]>(NOTIFICATIONS.filter((item) => !item.unread).map((item) => item.id)); const markAll = () => setReadIds(NOTIFICATIONS.map((item) => item.id)); return <AppShell><div className="page-enter mx-auto max-w-[820px]"><PageTitle eyebrow="알림" title="프로젝트의 새로운 소식" description="시안 생성 완료, 저장한 자재의 변화 등 중요한 업데이트를 모아 보여드립니다." action={<button onClick={markAll} className="inline-flex items-center gap-1.5 rounded-lg border border-[#e2ddd5] bg-white px-3 py-2.5 text-[10px] font-semibold text-[#5d554b]"><CheckCheck size={14} /> 모두 읽음 처리</button>} /><div className="premium-panel divide-y divide-[#ece7e0] overflow-hidden">{NOTIFICATIONS.map((item) => { const unread = !readIds.includes(item.id); return <Link href={item.id === "n-01" ? "/concepts" : "/materials"} className={unread ? "relative flex gap-4 bg-[#fdfcfb] p-5 hover:bg-[#faf8f5]" : "relative flex gap-4 p-5 hover:bg-[#faf8f5]"} key={item.id} onClick={() => setReadIds((current) => [...current, item.id])}><span className={unread ? "grid size-9 shrink-0 place-items-center rounded-xl bg-[#ebe1d4] text-[#584532]" : "grid size-9 shrink-0 place-items-center rounded-xl bg-[#f0ede8] text-[#877f75]"}>{item.id === "n-01" ? <Sparkles size={16} /> : <Bell size={16} />}</span><span className="min-w-0 flex-1"><strong className="block text-[12px] text-[#3d3831]">{item.title}</strong><span className="mt-1 block text-[11px] leading-5 text-[#7e756b]">{item.detail}</span><span className="mt-2 block text-[10px] text-[#a1988d]">{item.time}</span></span>{unread && <span className="mt-1 size-2 rounded-full bg-[#2c2924]" />}</Link>; })}</div></div></AppShell>; }
